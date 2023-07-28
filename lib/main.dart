@@ -1,10 +1,14 @@
 import 'dart:developer';
 
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
+import 'package:date_time_picker_widget/date_time_picker_widget.dart';
 import 'package:expensemanagerflutter/widget/customAppBar.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'date.dart';
+import 'date.dart';
 import 'date.dart';
 //import 'package:flutter_svg/flutter_svg.dart';
 
@@ -51,8 +55,8 @@ class _MyHomePageState extends State<MyHomePage> {
   /// widget list
   final List<Widget> bottomBarPages = [
     const Page1(),
-    Page2(),
-    const Page3(),
+    // Page2(),
+      Page3(),
    // const Page4(),
     //const Page5(),
   ];
@@ -227,7 +231,7 @@ class _Page1State extends State<Page1> {
                       tabs: [
                         Tab(text: 'Tab 1'),
                         Tab(text: 'Tab 2'),
-                        // Tab(text: 'Tab 3'),
+                         Tab(text: 'Tab 3'),
                       ],
                       indicatorColor: Colors.blue, // Customize the color of the selected tab indicator
                       labelColor: Colors.blue, // Customize the color of the selected tab label
@@ -245,9 +249,20 @@ class _Page1State extends State<Page1> {
                           ),
 
                           // Content of Tab 2
-                          Center(
-                            child: Text('Tab 2 content'),
-                          ),
+
+                              // OutlinedButton(
+                              //   onPressed: () {
+                              //     Navigator.push(
+                              //       context,
+                              //       MaterialPageRoute(
+                              //         builder: (context) => Page2(), // Replace YourDestinationScreen with the actual screen you want to navigate to.
+                              //       ),
+                              //     );
+                              //   },
+                              //   child: Text('Next'), // Replace 'Button Text' with your desired button label.
+                              // ),
+
+
 
                           // Content of Tab 3
                           // Center(
@@ -323,28 +338,170 @@ class _Page1State extends State<Page1> {
 // }
 
 
-class Page2 extends StatelessWidget {
-  const Page2({Key? key}) : super(key: key);
+
+class Expense {
+  String name;
+  double amount;
+
+  Expense(this.name, this.amount);
+}
+
+class Page3 extends StatefulWidget {
+  @override
+  State<Page3> createState() => _Page3State();
+}
+
+class _Page3State extends State<Page3> {
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
+
+  List<Expense> expenses = [];
+
+  void addExpense(Expense expense) {
+    setState(() {
+      expenses.add(expense);
+    });
+  }
+
+  double getTotalExpenses() {
+    double total = 0.0;
+    for (var expense in expenses) {
+      total += expense.amount;
+    }
+    return total;
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null && pickedDate != selectedDate) {
+      setState(() {
+        selectedDate = pickedDate;
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+
+    if (pickedTime != null && pickedTime != selectedTime) {
+      setState(() {
+        selectedTime = pickedTime;
+      });
+    }
+  }
+
+  void _showExpenseDialog(BuildContext context) {
+    TextEditingController nameController = TextEditingController();
+    TextEditingController amountController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Add Expense'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: InputDecoration(labelText: 'Expense Name'),
+            ),
+            TextField(
+              controller: amountController,
+              decoration: InputDecoration(labelText: 'Expense Amount'),
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              String name = nameController.text.trim();
+              double amount = double.tryParse(amountController.text) ?? 0.0;
+
+              if (name.isNotEmpty && amount > 0) {
+                addExpense(Expense(name, amount));
+              }
+
+              Navigator.of(context).pop();
+            },
+            child: Text('Add'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const MyDateHomePage();
+    double totalExpenses = getTotalExpenses();
+
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData.from(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Date and Time Picker'),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 60,),
+              ElevatedButton(
+                onPressed: () => _selectDate(context),
+                child: Text('Select Date'),
+              ),
+              SizedBox(height: 20),
+              Text('Selected Date: ${selectedDate.toLocal()}'),
+              SizedBox(height: 40),
+              ElevatedButton(
+                onPressed: () => _selectTime(context),
+                child: Text('Select Time'),
+              ),
+              SizedBox(height: 20),
+              Text('Selected Time: ${selectedTime.format(context)}'),
+              SizedBox(height: 40),
+              ElevatedButton(
+                onPressed: () => _showExpenseDialog(context),
+                child: Text('Monthly Expenses'),
+              ),
+              SizedBox(height: 20),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: expenses.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(expenses[index].name),
+                      subtitle: Text('\$${expenses[index].amount.toStringAsFixed(2)}'),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(height: 20),
+              // Display the total expenses
+              Text('Total Expenses: \$${totalExpenses.toStringAsFixed(2)}'),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
-
-
-
-
-
-class Page3 extends StatelessWidget {
-  const Page3({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        color: Colors.red, child: const Center(child: Text('Page 3')));
-  }
-}
-
-
 

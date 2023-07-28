@@ -27,9 +27,11 @@ titleAppBar({required BuildContext context, String? title ,Widget? leading, List
         ),
         backgroundColor: AppColor.primaryColor,
         centerTitle: true,
-        title: Text('Expense Manager',style: const TextStyle(color: AppColor.white),),
-        elevation: 4,
+        title: Text('Expense Manager'
+            ' Smart Spending, Simplified',
+          style: const TextStyle(color: AppColor.white),
+        //elevation: 4,
       ),
     ),
-  );
+    ) );
 }
