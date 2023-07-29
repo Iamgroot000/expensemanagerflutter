@@ -241,15 +241,9 @@ class _Page1State extends State<Page1> {
                       child: TabBarView(
                         children: [
 
-                          // Content of Tab 1
-                          Center(
-
-                            //child: Text('Tab 1 content',style: TextStyle(color: Colors.green),),
-
-                          ),
-
-                          // Content of Tab 2
-
+                         Tab1Screen(),
+                              ///table 2 screen
+                              Gaurav(),
                               // OutlinedButton(
                               //   onPressed: () {
                               //     Navigator.push(
@@ -265,9 +259,9 @@ class _Page1State extends State<Page1> {
 
 
                           // Content of Tab 3
-                          // Center(
-                          //   child: Text('Tab 3 content'),
-                          // ),
+                           Center(
+                            child: Text('Tab 3 content'),
+                           ),
                         ],
                       ),
                     ),
@@ -505,3 +499,49 @@ class _Page3State extends State<Page3> {
   }
 }
 
+
+
+
+class Gaurav extends StatefulWidget {
+  const Gaurav({Key? key}) : super(key: key);
+
+  @override
+  _GauravState createState() => _GauravState();
+}
+
+class _GauravState extends State<Gaurav> {
+  List<Map<String, String>> incomes = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: OutlinedButton(
+        onPressed: (){}, child: Text("Add"),
+      ),
+    );
+  }
+}
+
+
+
+
+class Tab1Screen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+     // appBar: AppBar(
+       // title: Text('Tab 1'),
+      //),
+      body: Center(
+        child: OutlinedButton(
+          onPressed: () {
+            // Navigate to Tab 2 by changing the selected index of the TabController
+            ///TODO index ke hisab se jayega dekh index 0 pe tab 1 and index 1 pe tab 2 and index 2 pe tab 3
+            DefaultTabController.of(context).animateTo(1); // 1 represents the index of Tab 2
+          },
+          child: Text("Source of income"),
+        ),
+      ),
+    );
+  }
+}
