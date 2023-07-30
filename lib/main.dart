@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter/services.dart';
 
 import 'date.dart';
 import 'date.dart';
@@ -229,8 +230,10 @@ class _Page1State extends State<Page1> {
             ),
           ),
 
-          SizedBox(height:40),
+          SizedBox(height:60),
           Row(
+           // mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
                 child: Container(
@@ -239,7 +242,7 @@ class _Page1State extends State<Page1> {
 
                   child: Center(
                     child: Text(
-                      'Source of income',
+                      'Source of Income',
                       style: TextStyle(
                         color: Colors.green,
                         fontSize: 20,
@@ -265,13 +268,24 @@ class _Page1State extends State<Page1> {
                 child: Text("ADD HERE"),
               ),
 
-            ],
-          ),
-        ], // Close Column's children list
-      ), // Close Column
+
+
+
+     ] )
+    ]
+      ),
     ); // Close Scaffold
   }
 }
+
+
+
+        // Close Column's children list
+       // Close Column
+
+
+
+
 
 
 
@@ -605,6 +619,8 @@ class _Page3State extends State<Page3> {
 // }
 
 
+ // Add this import for using input formatters
+
 class RegistrationApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -694,7 +710,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   SizedBox(height: 16),
                   TextFormField(
                     controller: _aadharController,
-                    obscureText: true,
+                    keyboardType: TextInputType.number, // Allow only numeric input
                     decoration: InputDecoration(labelText: 'Aadhar No'),
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -724,28 +740,51 @@ class _RegistrationFormState extends State<RegistrationForm> {
                       if (value!.isEmpty) {
                         return 'Please enter Income';
                       }
-                      // You can add additional income validation if required
+
+                      // Check if the input value contains only numeric characters
+                      if (double.tryParse(value) == null) {
+                        return 'Please enter a valid numeric value';
+                      }
+
+                      // Additional validation based on your requirements can be added here.
+
                       return null;
                     },
                   ),
+
                   SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        // Registration logic goes here
-                        // For a real-world app, you would handle the form submission and data storage
-                        // For simplicity, we'll just print the values here
-                        print('First Name: ${_firstNameController.text}');
-                        print('Last Name: ${_lastNameController.text}');
-                        print('Email: ${_emailController.text}');
-                        print('Password: ${_passwordController.text}');
-                        print('Aadhar No: ${_aadharController.text}');
-                        print('Occupation: ${_occupationController.text}');
-                        print('Income: ${_incomeController.text}');
+                        // Create a map with the form data
+                        Map<String, dynamic> formData = {
+                          'firstName': _firstNameController.text,
+                          'lastName': _lastNameController.text,
+                          'email': _emailController.text,
+                          'aadharNo': _aadharController.text,
+                          'occupation': _occupationController.text,
+                          'income': double.parse(_incomeController.text),
+                        };
+
+                        try {
+                          // Save the data to Cloud Firestore
+                          await FirebaseFirestore.instance.collection('expenses').add(formData);
+
+                          // Show a success message to the user (Optional)
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Form data saved successfully!')),
+                          );
+                        } catch (e) {
+                          // Handle any errors that occurred during the data saving process (Optional)
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error: Form data could not be saved.')),
+                          );
+                        }
                       }
                     },
                     child: Text('Submit'),
                   ),
+
                 ],
               ),
             ),
@@ -755,4 +794,3 @@ class _RegistrationFormState extends State<RegistrationForm> {
     );
   }
 }
-
