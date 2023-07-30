@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker_widget/date_time_picker_widget.dart';
 import 'package:expensemanagerflutter/widget/customAppBar.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -10,10 +12,15 @@ import 'package:table_calendar/table_calendar.dart';
 import 'date.dart';
 import 'date.dart';
 import 'date.dart';
+import 'firebase_options.dart';
 //import 'package:flutter_svg/flutter_svg.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -165,6 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+
 class Page1 extends StatefulWidget {
   const Page1({Key? key}) : super(key: key);
 
@@ -220,125 +228,78 @@ class _Page1State extends State<Page1> {
               },
             ),
           ),
-          Expanded(
-            child: Container(
-              //color: Colors.grey,
-              child: DefaultTabController(
-                length: 3, // Number of tabs you want
-                child: Column(
-                  children: [
-                    TabBar(
-                      tabs: [
-                        Tab(text: 'Tab 1'),
-                        Tab(text: 'Tab 2'),
-                         Tab(text: 'Tab 3'),
-                      ],
-                      indicatorColor: Colors.blue, // Customize the color of the selected tab indicator
-                      labelColor: Colors.blue, // Customize the color of the selected tab label
-                      unselectedLabelColor: Colors.black, // Customize the color of unselected tab labels
-                    ),
-                    Expanded(
-                      child: TabBarView(
-                        children: [
 
-                         Tab1Screen(),
-                              ///table 2 screen
-                              Gaurav(),
-                              // OutlinedButton(
-                              //   onPressed: () {
-                              //     Navigator.push(
-                              //       context,
-                              //       MaterialPageRoute(
-                              //         builder: (context) => Page2(), // Replace YourDestinationScreen with the actual screen you want to navigate to.
-                              //       ),
-                              //     );
-                              //   },
-                              //   child: Text('Next'), // Replace 'Button Text' with your desired button label.
-                              // ),
+          SizedBox(height:40),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  height: 40,
+                  width: 100,
 
-
-
-                          // Content of Tab 3
-                           Center(
-                            child: Text('Tab 3 content'),
-                           ),
-                        ],
+                  child: Center(
+                    child: Text(
+                      'Source of income',
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontSize: 20,
                       ),
+
                     ),
-                  ],
+                  ),
+
                 ),
               ),
-            ),
-          )
+              ElevatedButton(
+                onPressed: () {
+                  // Perform any necessary actions before navigating, if needed.
 
+                  // Navigate to the DestinationScreen using Navigator.push.
+                 // Navigator.push(
+                 //   context,
+                  //  MaterialPageRoute(
+                   //   builder: (context) => SourceOfIncomeWidget(), // RepSourceOfIncomeWidgetSourceOfIncomeWidgetlace with your destination screen.
+                    //),
+                 // );
+                },
+                child: Text("ADD HERE"),
+              ),
 
-
-
-
-
-          // Add any other widgets below the calendar as needed.
-        ]
-
-
-      ),
-
-    );
-
+            ],
+          ),
+        ], // Close Column's children list
+      ), // Close Column
+    ); // Close Scaffold
   }
 }
 
 
-// class AnimatedText extends StatefulWidget {
-//   const AnimatedText({Key? key}) : super(key: key);
-//
-//   @override
-//   _AnimatedTextState createState() => _AnimatedTextState();
-// }
-//
-// class _AnimatedTextState extends State<AnimatedText> {
-//   bool _isExpanded = false;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _startAnimation();
-//   }
-//
-//   void _startAnimation() async {
-//     await Future.delayed(const Duration(seconds: 1));
-//     setState(() {
-//       _isExpanded = true;
-//     });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return AnimatedDefaultTextStyle(
-//       duration: const Duration(milliseconds: 500),
-//       style: _isExpanded
-//           ? TextStyle(
-//         fontSize: 24,
-//         fontWeight: FontWeight.bold,
-//         color: Colors.white,
-//       )
-//           : TextStyle(
-//         fontSize: 16,
-//         fontWeight: FontWeight.normal,
-//         color: Colors.white,
-//       ),
-//       child: const Text('Expense Manager'),
-//     );
-//   }
-// }
 
-
-
-class Expense {
+    class Expense {
   String name;
   double amount;
 
   Expense(this.name, this.amount);
 }
+
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp();
+//   runApp(MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Flutter Demo',
+//       theme: ThemeData.from(
+//         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+//       ),
+//       home: Page3(),
+//     );
+//   }
+// }
 
 class Page3 extends StatefulWidget {
   @override
@@ -393,6 +354,20 @@ class _Page3State extends State<Page3> {
     }
   }
 
+  void saveExpenseToFirestore(Expense expense) async {
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      Map<String, dynamic> expenseData = {
+        'name': expense.name,
+        'amount': expense.amount,
+        'timestamp': FieldValue.serverTimestamp(),
+      };
+      await firestore.collection('expenses').add(expenseData);
+    } catch (e) {
+      print('Error saving expense to Firestore: $e');
+    }
+  }
+
   void _showExpenseDialog(BuildContext context) {
     TextEditingController nameController = TextEditingController();
     TextEditingController amountController = TextEditingController();
@@ -429,6 +404,7 @@ class _Page3State extends State<Page3> {
 
               if (name.isNotEmpty && amount > 0) {
                 addExpense(Expense(name, amount));
+                saveExpenseToFirestore(Expense(name, amount));
               }
 
               Navigator.of(context).pop();
@@ -444,104 +420,193 @@ class _Page3State extends State<Page3> {
   Widget build(BuildContext context) {
     double totalExpenses = getTotalExpenses();
 
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData.from(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Date and Time Picker'),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 60,),
-              ElevatedButton(
-                onPressed: () => _selectDate(context),
-                child: Text('Select Date'),
-              ),
-              SizedBox(height: 20),
-              Text('Selected Date: ${selectedDate.toLocal()}'),
-              SizedBox(height: 40),
-              ElevatedButton(
-                onPressed: () => _selectTime(context),
-                child: Text('Select Time'),
-              ),
-              SizedBox(height: 20),
-              Text('Selected Time: ${selectedTime.format(context)}'),
-              SizedBox(height: 40),
-              ElevatedButton(
-                onPressed: () => _showExpenseDialog(context),
-                child: Text('Monthly Expenses'),
-              ),
-              SizedBox(height: 20),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: expenses.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(expenses[index].name),
-                      subtitle: Text('\$${expenses[index].amount.toStringAsFixed(2)}'),
-                    );
-                  },
-                ),
-              ),
-              SizedBox(height: 20),
-              // Display the total expenses
-              Text('Total Expenses: \$${totalExpenses.toStringAsFixed(2)}'),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-
-
-
-class Gaurav extends StatefulWidget {
-  const Gaurav({Key? key}) : super(key: key);
-
-  @override
-  _GauravState createState() => _GauravState();
-}
-
-class _GauravState extends State<Gaurav> {
-  List<Map<String, String>> incomes = [];
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: OutlinedButton(
-        onPressed: (){}, child: Text("Add"),
-      ),
-    );
-  }
-}
-
-
-
-
-class Tab1Screen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
-     // appBar: AppBar(
-       // title: Text('Tab 1'),
-      //),
+      appBar: AppBar(
+        title: Center(child: Text('YOUR EXPENSES')),
+      ),
       body: Center(
-        child: OutlinedButton(
-          onPressed: () {
-            // Navigate to Tab 2 by changing the selected index of the TabController
-            ///TODO index ke hisab se jayega dekh index 0 pe tab 1 and index 1 pe tab 2 and index 2 pe tab 3
-            DefaultTabController.of(context).animateTo(1); // 1 represents the index of Tab 2
-          },
-          child: Text("Source of income"),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 60,),
+            ElevatedButton(
+              onPressed: () => _selectDate(context),
+              child: Text('Select Date'),
+            ),
+            SizedBox(height: 20),
+            Text('Selected Date: ${selectedDate.toLocal()}'),
+            SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: () => _selectTime(context),
+              child: Text('Select Time'),
+            ),
+            SizedBox(height: 20),
+            Text('Selected Time: ${selectedTime.format(context)}'),
+            SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: () => _showExpenseDialog(context),
+              child: Text('Monthly Expenses'),
+            ),
+            SizedBox(height: 20),
+            Expanded(
+              child: ListView.builder(
+                itemCount: expenses.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(expenses[index].name),
+                    subtitle: Text('\$${expenses[index].amount.toStringAsFixed(2)}'),
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 20),
+            Text('Total Expenses: \$${totalExpenses.toStringAsFixed(2)}'),
+          ],
         ),
       ),
     );
   }
 }
+
+
+
+// class Gaurav extends StatefulWidget {
+//   const Gaurav({Key? key}) : super(key: key);
+//
+//   @override
+//   _GauravState createState() => _GauravState();
+// }
+
+// class _GauravState extends State<Gaurav> {
+//   List<Map<String, String>> incomes = [];
+//
+//   void _showAddIncomeDialog() async {
+//     final result = await showDialog(
+//       context: context,
+//       builder: (context) => AddIncomeDialog(),
+//     );
+//
+//     if (result != null) {
+//       setState(() {
+//         incomes.add(result);
+//       });
+//     }
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           OutlinedButton(
+//             onPressed: _showAddIncomeDialog,
+//             child: Text("Add source of income"),
+//           ),
+//           SizedBox(height: 20),
+//           // Display the list of incomes
+//           ListView.builder(
+//             shrinkWrap: true,
+//             itemCount: incomes.length,
+//             itemBuilder: (context, index) {
+//               final income = incomes[index];
+//               return ListTile(
+//                 title: Text(income['source'] ?? ''),
+//                 subtitle: Text(income['amount'] ?? ''),
+//               );
+//             },
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+//
+//
+// class AddIncomeDialog extends StatefulWidget {
+//   @override
+//   _AddIncomeDialogState createState() => _AddIncomeDialogState();
+// }
+//
+// class _AddIncomeDialogState extends State<AddIncomeDialog> {
+//   String incomeSource = '';
+//   String incomeAmount = '';
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return AlertDialog(
+//       title: Text('Add Source of Income'),
+//       content: SingleChildScrollView(
+//         child: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             TextField(
+//               decoration: InputDecoration(labelText: 'Income Source'),
+//               onChanged: (value) {
+//                 setState(() {
+//                   incomeSource = value;
+//                 });
+//               },
+//             ),
+//             TextField(
+//               decoration: InputDecoration(labelText: 'Income Amount'),
+//               keyboardType: TextInputType.number,
+//               onChanged: (value) {
+//                 setState(() {
+//                   incomeAmount = value;
+//                 });
+//               },
+//             ),
+//           ],
+//         ),
+//       ),
+//       actions: [
+//         ElevatedButton(
+//           onPressed: () {
+//             // Add the income to the list and close the dialog
+//             if (incomeSource.isNotEmpty && incomeAmount.isNotEmpty) {
+//               Navigator.of(context).pop({
+//                 'source': incomeSource,
+//                 'amount': incomeAmount,
+//               });
+//             } else {
+//               // Show a snackbar or toast message indicating the fields are required
+//             }
+//           },
+//           child: Text('Add'),
+//         ),
+//       ],
+//     );
+//   }
+// }
+//
+//
+//
+//
+// class Tab1Screen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//      // appBar: AppBar(
+//        // title: Text('Tab 1'),
+//       //),
+//       body: Center(
+//         child: OutlinedButton(
+//           onPressed: () {
+//             // Navigate to Tab 2 by changing the selected index of the TabController
+//             ///TODO index ke hisab se jayega dekh index 0 pe tab 1 and index 1 pe tab 2 and index 2 pe tab 3
+//             DefaultTabController.of(context).animateTo(1); // 1 represents the index of Tab 2
+//           },
+//           child: Text("Source of income"),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
+
+
+
+
+
