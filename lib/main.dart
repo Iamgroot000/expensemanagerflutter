@@ -255,12 +255,12 @@ class _Page1State extends State<Page1> {
                   // Perform any necessary actions before navigating, if needed.
 
                   // Navigate to the DestinationScreen using Navigator.push.
-                 // Navigator.push(
-                 //   context,
-                  //  MaterialPageRoute(
-                   //   builder: (context) => SourceOfIncomeWidget(), // RepSourceOfIncomeWidgetSourceOfIncomeWidgetlace with your destination screen.
-                    //),
-                 // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RegistrationApp(), // RepSourceOfIncomeWidgetSourceOfIncomeWidgetlace with your destination screen.
+                    ),
+                 );
                 },
                 child: Text("ADD HERE"),
               ),
@@ -605,8 +605,154 @@ class _Page3State extends State<Page3> {
 // }
 
 
+class RegistrationApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Registration Form',
+      home: RegistrationForm(),
+    );
+  }
+}
 
+class RegistrationForm extends StatefulWidget {
+  @override
+  _RegistrationFormState createState() => _RegistrationFormState();
+}
 
+class _RegistrationFormState extends State<RegistrationForm> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _aadharController = TextEditingController();
+  final TextEditingController _occupationController = TextEditingController();
+  final TextEditingController _incomeController = TextEditingController();
 
-
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Center(
+            child: Container(
+              height: 750,
+              width: 700,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  TextFormField(
+                    controller: _firstNameController,
+                    decoration: InputDecoration(labelText: 'First Name'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    controller: _lastNameController,
+                    decoration: InputDecoration(labelText: 'Last Name'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your last name';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(labelText: 'Email'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      // You can add additional email format validation if required
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(labelText: 'Password'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter a password';
+                      }
+                      // You can add additional password validation if required
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    controller: _aadharController,
+                    obscureText: true,
+                    decoration: InputDecoration(labelText: 'Aadhar No'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter an Aadhar No';
+                      }
+                      // You can add additional Aadhar No validation if required
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    controller: _occupationController,
+                    decoration: InputDecoration(labelText: 'Occupation'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your occupation';
+                      }
+                      // You can add additional occupation validation if required
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    controller: _incomeController,
+                    decoration: InputDecoration(labelText: 'Income'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter Income';
+                      }
+                      // You can add additional income validation if required
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        // Registration logic goes here
+                        // For a real-world app, you would handle the form submission and data storage
+                        // For simplicity, we'll just print the values here
+                        print('First Name: ${_firstNameController.text}');
+                        print('Last Name: ${_lastNameController.text}');
+                        print('Email: ${_emailController.text}');
+                        print('Password: ${_passwordController.text}');
+                        print('Aadhar No: ${_aadharController.text}');
+                        print('Occupation: ${_occupationController.text}');
+                        print('Income: ${_incomeController.text}');
+                      }
+                    },
+                    child: Text('Submit'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
