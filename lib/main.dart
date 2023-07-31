@@ -1,14 +1,17 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker_widget/date_time_picker_widget.dart';
+import 'package:expensemanagerflutter/utils/ScreenSize.dart';
 import 'package:expensemanagerflutter/widget/customAppBar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 import 'date.dart';
 import 'date.dart';
@@ -63,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
   /// widget list
   final List<Widget> bottomBarPages = [
     const Page1(),
-    // Page2(),
+     const Page2(),
       Page3(),
    // const Page4(),
     //const Page5(),
@@ -76,96 +79,97 @@ class _MyHomePageState extends State<MyHomePage> {
 
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        SizedBox(height: 40,),
-        Container(
-          height: 800,
-          width: 400,
-          child: Scaffold(
-            body: PageView(
-              controller: _pageController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: List.generate(
-                  bottomBarPages.length, (index) => bottomBarPages[index]),
+        SingleChildScrollView(
+          child: Container(
+            height: ScreenSize.height(context),
+            width: 400,
+            child: Scaffold(
+              body: PageView(
+                controller: _pageController,
+                physics: const NeverScrollableScrollPhysics(),
+                children: List.generate(
+                    bottomBarPages.length, (index) => bottomBarPages[index]),
+              ),
+              extendBody: true,
+              bottomNavigationBar: (bottomBarPages.length <= maxCount)
+                  ? AnimatedNotchBottomBar(
+                /// Provide NotchBottomBarController
+                notchBottomBarController: _controller,
+                color: Colors.white,
+                showLabel: false,
+                notchColor: Colors.black87,
+
+                /// restart app if you change removeMargins
+                removeMargins: false,
+                bottomBarWidth: 500,
+                durationInMilliSeconds: 300,
+                bottomBarItems: [
+                  const BottomBarItem(
+                    inActiveItem: Icon(
+                      Icons.home_filled,
+                      color: Colors.blueGrey,
+                    ),
+                    activeItem: Icon(
+                      Icons.home_filled,
+                      color: Colors.blueAccent,
+                    ),
+                    itemLabel: 'Page 1',
+                  ),
+                  const BottomBarItem(
+                    inActiveItem: Icon(
+                      Icons.star,
+                      color: Colors.blueGrey,
+                    ),
+                    activeItem: Icon(
+                      Icons.star,
+                      color: Colors.blueAccent,
+                    ),
+                    itemLabel: 'Page 2',
+                  ),
+
+                  ///svg example
+                  // BottomBarItem(
+                  //   inActiveItem: SvgPicture.asset(
+                  //     'assets/search_icon.svg',
+                  //     color: Colors.blueGrey,
+                  //   ),
+                  //   activeItem: SvgPicture.asset(
+                  //     'assets/search_icon.svg',
+                  //     color: Colors.white,
+                  //   ),
+                  //   itemLabel: 'Page 3',
+                  // ),
+                  const BottomBarItem(
+                    inActiveItem: Icon(
+                      Icons.settings,
+                      color: Colors.blueGrey,
+                    ),
+                    activeItem: Icon(
+                      Icons.settings,
+                      color: Colors.pink,
+                    ),
+                    itemLabel: 'Page 4',
+                  ),
+                  const BottomBarItem(
+                    inActiveItem: Icon(
+                      Icons.person,
+                      color: Colors.blueGrey,
+                    ),
+                    activeItem: Icon(
+                      Icons.person,
+                      color: Colors.yellow,
+                    ),
+                    itemLabel: 'Page 5',
+                  ),
+                ],
+                onTap: (index) {
+                  /// perform action on tab change and to update pages you can update pages without pages
+                  log('current selected index $index');
+                  _pageController.jumpToPage(index);
+                },
+              )
+                  : null,
             ),
-            extendBody: true,
-            bottomNavigationBar: (bottomBarPages.length <= maxCount)
-                ? AnimatedNotchBottomBar(
-              /// Provide NotchBottomBarController
-              notchBottomBarController: _controller,
-              color: Colors.white,
-              showLabel: false,
-              notchColor: Colors.black87,
-
-              /// restart app if you change removeMargins
-              removeMargins: false,
-              bottomBarWidth: 500,
-              durationInMilliSeconds: 300,
-              bottomBarItems: [
-                const BottomBarItem(
-                  inActiveItem: Icon(
-                    Icons.home_filled,
-                    color: Colors.blueGrey,
-                  ),
-                  activeItem: Icon(
-                    Icons.home_filled,
-                    color: Colors.blueAccent,
-                  ),
-                  itemLabel: 'Page 1',
-                ),
-                const BottomBarItem(
-                  inActiveItem: Icon(
-                    Icons.star,
-                    color: Colors.blueGrey,
-                  ),
-                  activeItem: Icon(
-                    Icons.star,
-                    color: Colors.blueAccent,
-                  ),
-                  itemLabel: 'Page 2',
-                ),
-
-                ///svg example
-                // BottomBarItem(
-                //   inActiveItem: SvgPicture.asset(
-                //     'assets/search_icon.svg',
-                //     color: Colors.blueGrey,
-                //   ),
-                //   activeItem: SvgPicture.asset(
-                //     'assets/search_icon.svg',
-                //     color: Colors.white,
-                //   ),
-                //   itemLabel: 'Page 3',
-                // ),
-                const BottomBarItem(
-                  inActiveItem: Icon(
-                    Icons.settings,
-                    color: Colors.blueGrey,
-                  ),
-                  activeItem: Icon(
-                    Icons.settings,
-                    color: Colors.pink,
-                  ),
-                  itemLabel: 'Page 4',
-                ),
-                const BottomBarItem(
-                  inActiveItem: Icon(
-                    Icons.person,
-                    color: Colors.blueGrey,
-                  ),
-                  activeItem: Icon(
-                    Icons.person,
-                    color: Colors.yellow,
-                  ),
-                  itemLabel: 'Page 5',
-                ),
-              ],
-              onTap: (index) {
-                /// perform action on tab change and to update pages you can update pages without pages
-                log('current selected index $index');
-                _pageController.jumpToPage(index);
-              },
-            )
-                : null,
           ),
         ),
       ],
@@ -794,3 +798,54 @@ class _RegistrationFormState extends State<RegistrationForm> {
     );
   }
 }
+
+class Page2 extends StatefulWidget {
+  const Page2({super.key});
+
+  @override
+  State<Page2> createState() => _Page2State();
+}
+
+
+class _Page2State extends State<Page2> {
+  Future<List<dynamic>> fetchData() async {
+    final url = Uri.parse('http://universities.hipolabs.com/search?country=United+States');
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      // If the server returns a 200 OK response, parse the JSON.
+      final List<dynamic> data = json.decode(response.body);
+      return data;
+    } else {
+      // If the server did not return a 200 OK response, throw an exception.
+      throw Exception('Failed to load data');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<dynamic>>(
+      future: fetchData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator(); // While data is being fetched, show a loading indicator.
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          // If the data is successfully fetched, you can use it in your UI.
+          final data = snapshot.data;
+          return Container(
+            height: 100,
+            width: 100,
+            color: Colors.blueGrey,
+            child: Center(
+              child: Text('Data: $data'),
+            ),
+          );
+        }
+      },
+    );
+  }
+}
+
