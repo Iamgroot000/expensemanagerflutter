@@ -46,6 +46,9 @@ dependencies:
   http: ^1.1.0
   flutter_credit_card_ui: ^0.0.4
   flutter_credit_card: ^3.0.7
+  mono_flutter: ^2.1.0
+  flutter_animation_progress_bar: ^2.3.1
+  flutter_loading_animation_kit: ^0.0.2
 
 dev_dependencies:
   flutter_test:

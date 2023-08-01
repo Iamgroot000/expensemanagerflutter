@@ -8,23 +8,36 @@ import 'package:expensemanagerflutter/utils/ScreenSize.dart';
 import 'package:expensemanagerflutter/widget/customAppBar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_credit_card/credit_card_brand.dart';
+import 'package:flutter_credit_card/credit_card_form.dart';
+import 'package:flutter_credit_card/credit_card_widget.dart';
+import 'package:flutter_credit_card/custom_card_type_icon.dart';
+import 'package:flutter_credit_card/glassmorphism_config.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+ import 'package:flutter_credit_card/credit_card_brand.dart';
+import 'package:flutter_credit_card/flutter_credit_card.dart';
 
+import 'WELCOME.dart';
 import 'date.dart';
 import 'date.dart';
 import 'date.dart';
 import 'firebase_options.dart';
 //import 'package:flutter_svg/flutter_svg.dart';
 
+ import 'package:flutter_credit_card/flutter_credit_card.dart';
+
+import 'mono.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(MyWELCOMEApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -67,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> bottomBarPages = [
     const Page1(),
       Page2(),
-    MySample(),
+   page3()
    // const Page4(),
     //const Page5(),
   ];
@@ -799,53 +812,55 @@ class _RegistrationFormState extends State<RegistrationForm> {
   }
 }
 
-// class Page2 extends StatefulWidget {
-//   const Page2({super.key});
-//
-//   @override
-//   State<Page2> createState() => _Page2State();
-// }
-//
-//
-// class _Page2State extends State<Page2> {
-//   Future<List<dynamic>> fetchData() async {
-//     final url = Uri.parse('http://universities.hipolabs.com/search?country=United+States');
-//
-//     final response = await http.get(url);
-//
-//     if (response.statusCode == 200) {
-//       // If the server returns a 200 OK response, parse the JSON.
-//       final List<dynamic> data = json.decode(response.body);
-//       return data;
-//     } else {
-//       // If the server did not return a 200 OK response, throw an exception.
-//       throw Exception('Failed to load data');
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return FutureBuilder<List<dynamic>>(
-//       future: fetchData(),
-//       builder: (context, snapshot) {
-//         if (snapshot.connectionState == ConnectionState.waiting) {
-//           return CircularProgressIndicator(); // While data is being fetched, show a loading indicator.
-//         } else if (snapshot.hasError) {
-//           return Text('Error: ${snapshot.error}');
-//         } else {
-//           // If the data is successfully fetched, you can use it in your UI.
-//           final data = snapshot.data;
-//           return Container(
-//             height: 100,
-//             width: 100,
-//             color: Colors.blueGrey,
-//             child: Center(
-//               child: Text('Data: $data'),
-//             ),
-//           );
-//         }
-//       },
-//     );
-//   }
-// }
-//
+class page3 extends StatefulWidget {
+  const page3({super.key});
+
+  @override
+  State<page3> createState() => _page3State();
+}
+
+class _page3State extends State<page3> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(height: 20,),
+        Container(
+          height: 40,
+          width: 200,
+          child: OutlinedButton(
+           onPressed: () {  Navigator.push(
+               context,
+               MaterialPageRoute(
+               builder: (context) => MySample ()));
+        },
+            child: Text("Add you card here"),
+
+
+          ),
+
+        ),
+
+        SizedBox(height: 20,),
+        Container(
+          height: 40,
+          width: 200,
+          child: OutlinedButton(
+            onPressed: () {  Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>  MyPApp()));
+            },
+            child: Text("Mono"),
+
+
+          ),
+
+        ),
+
+
+      ],
+    );
+  }
+}
+

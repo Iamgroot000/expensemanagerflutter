@@ -1,4 +1,4 @@
-
+//import 'package:example/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_brand.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
@@ -203,11 +203,11 @@ class MySampleState extends State<MySample> {
                             margin: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
-                              gradient:  LinearGradient(
+                              gradient: const LinearGradient(
                                 colors: <Color>[
                                   Colors.blueGrey,
                                   Colors.blueGrey,
-                                  Colors.blueGrey ,
+                                  Colors.blueGrey,
                                   Colors.blueGrey,
                                   Colors.blueGrey,
                                   Colors.blueGrey,
