@@ -1,335 +1,264 @@
-//
-// import 'package:date_time_picker_widget/date_time_picker_widget.dart';
-// import 'package:flutter/material.dart';
-// import 'package:intl/intl.dart';
-//
-//
-// class Page2 extends StatefulWidget {
-//   @override
-//   State<Page2> createState() => _Page2State();
-// }
-//
-// class _Page2State extends State<Page2> {
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Flutter Demo',
-//       theme: ThemeData.from(
-//         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-//       ),
-//       home: const MyDateHomePage(),
-//     );
-//   }
-// }
-//
-// class MyDateHomePage extends StatefulWidget {
-//   const MyDateHomePage({super.key});
-//
-//   @override
-//   State<MyDateHomePage> createState() => _MyDateHomePageState();
-// }
-//
-// class _MyDateHomePageState extends State<MyDateHomePage> {
-//   Color _color = Colors.blue;
-//   String _d1 = '', _d2 = '';
-//   String _t1 = '', _t2 = '';
-//   bool _material3 = true;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Theme(
-//       data: Theme.of(context).copyWith(
-//         colorScheme: ColorScheme.fromSeed(
-//           seedColor: _color,
-//           primary: _color,
-//           secondary: _color,
-//         ),
-//         useMaterial3: _material3,
-//       ),
-//       child: Scaffold(
-//         appBar: AppBar(
-//           // title: Text(widget.title),
-//         ),
-//         body: SafeArea(
-//           child: SingleChildScrollView(
-//             child: Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: 0),
-//               child: Column(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: <Widget>[
-//                   const SizedBox(height: 24),
-//                   CheckboxListTile(
-//                     value: _material3,
-//                     title: Text(
-//                       'Use Material 3',
-//                       style: Theme.of(context).textTheme.titleLarge,
-//                     ),
-//                     onChanged: (value) {
-//                       setState(() {
-//                         _material3 = value ?? true;
-//                       });
-//                     },
-//                   ),
-//                   const SizedBox(height: 24),
-//                   Text(
-//                     'Color Pallet',
-//                     textAlign: TextAlign.center,
-//                     style: Theme.of(context).textTheme.titleLarge,
-//                   ),
-//                   // const SizedBox(height: 24),
-//                   _colorPallet(),
-//                   // const SizedBox(height: 24),
-//                   // const Divider(),
-//                   // const SizedBox(height: 24),
-//                   _dateTimePicker(),
-//                   // const SizedBox(height: 24),
-//                   // const Divider(),
-//                   // const SizedBox(height: 24),
-//                   _datePicker(),
-//                   // const SizedBox(height: 24),
-//                   // const Divider(),
-//                   // const SizedBox(height: 24),
-//                   _timePicker(),
-//                   // const Divider(),
-//                   // const SizedBox(height: 24),
-//                   _newDatetimePicker(),
-//
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   Widget _newDatetimePicker(){
-//     final dt = DateTime.now();
-//     final dtMin = DateTime.now().add(const Duration(hours: 1, minutes: 0));
-//     final dtMax = dtMin.add(const Duration(
-//       days: 4,
-//     ));
-//     debugPrint('dt: ${dt.toString()}');
-//     debugPrint('dtMin: ${dtMin.toString()}');
-//     debugPrint('dtMax: ${dtMax.toString()}');
-//
-//     return Container(
-//         child: DateTimePicker(
-//           initialSelectedDate: dtMin,
-//           startDate: dtMin,
-//           //.subtract(const Duration(days: 1)),
-//           endDate: dtMax,
-//           startTime: dt,
-//           endTime: dtMax,
-//           timeInterval: const Duration(minutes: 15),
-//           datePickerTitle: 'Pick your preferred date',
-//           timePickerTitle: 'Pick your preferred time',
-//           timeOutOfRangeError: 'Sorry shop is closed now',
-//           is24h: false,
-//           numberOfWeeksToDisplay: 1,
-//           locale: 'es',
-//           customStringWeekdays: const ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
-//           onDateChanged: (date) {
-//             setState(() {
-//               _d1 = DateFormat('dd MMM, yyyy').format(date);
-//             });
-//           },
-//           onTimeChanged: (time) {
-//             setState(() {
-//               _t1 = DateFormat('hh:mm:ss aa').format(time);
-//             });
-//           },
-//         ) /*DateTimePicker(
-//         /*initialSelectedDate: dtMin.add(const Duration(minutes: 5)),
-//         startDate: dtMin,
-//         endDate: dtMax,
-//         startTime: dtMin,
-//         endTime: dtMax,//DateTime(dt.year, dt.month, dt.day, 18),
-//         timeInterval: interval,*/
-//         initialSelectedDate: dt,
-//         startDate: dt.subtract(const Duration(days: 1)),
-//         endDate: dt.add(const Duration(days: 60)),
-//         startTime: DateTime(dt.year, dt.month, dt.day, 6),
-//         endTime: DateTime(dt.year, dt.month, dt.day, 18),
-//         timeInterval: const Duration(minutes: 15),
-//         datePickerTitle: 'Elige la fecha',
-//         timePickerTitle: 'Elige la hora',
-//         timeOutOfRangeError: 'Fuera del rango',
-//         is24h: true,
-//         locale: "es",
-//         customStringWeekdays: ["D", "L", "M", "X", "J", "V", "S"],
-//         onDateChanged: (date) {
-//           //setState(() {
-//           final _d1 = DateFormat('dd MMM, yyyy').format(date);
-//           debugPrint("onDateChanged d1: $_d1");
-//           //});
-//         },
-//         onTimeChanged: (time) {
-//           //setState(() {
-//           final _t1 = DateFormat('hh:mm:ss aa').format(time);
-//           debugPrint("onDateChanged t1: $_t1");
-//           //});
-//         },
-//       ),*/
-//     );
-//   }
-//
-//   Widget _dateTimePicker() {
-//     final dt = DateTime.now();
-//     return Column(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       children: [
-//         Text(
-//           'Date & Time Picker',
-//           textAlign: TextAlign.center,
-//           style: Theme.of(context).textTheme.titleLarge,
-//         ),
-//         const SizedBox(height: 8),
-//         Text(
-//           'Date: $_d1  Time: $_t1',
-//           textAlign: TextAlign.center,
-//           style: Theme.of(context).textTheme.bodyMedium,
-//         ),
-//         const SizedBox(height: 16),
-//         DateTimePicker(
-//           initialSelectedDate: dt,
-//           startDate: dt.subtract(const Duration(days: 1)),
-//           endDate: dt.add(const Duration(days: 60)),
-//           startTime: DateTime(dt.year, dt.month, dt.day, 6),
-//           endTime: DateTime(dt.year, dt.month, dt.day, 18),
-//           timeInterval: const Duration(minutes: 15),
-//           datePickerTitle: 'Pick your preferred date',
-//           timePickerTitle: 'Pick your preferred time',
-//           timeOutOfRangeError: 'Sorry shop is closed now',
-//           is24h: false,
-//           numberOfWeeksToDisplay: 4,
-//           onDateChanged: (date) {
-//             setState(() {
-//               _d1 = DateFormat('dd MMM, yyyy').format(date);
-//             });
-//           },
-//           onTimeChanged: (time) {
-//             setState(() {
-//               _t1 = DateFormat('hh:mm:ss aa').format(time);
-//             });
-//           },
-//         )
-//       ],
-//     );
-//   }
-//
-//   Widget _datePicker() {
-//     return Column(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       children: [
-//         Text(
-//           'Date Picker',
-//           textAlign: TextAlign.center,
-//           style: Theme.of(context).textTheme.titleLarge,
-//         ),
-//         const SizedBox(height: 8),
-//         Text(
-//           'Date: $_d2',
-//           textAlign: TextAlign.center,
-//           style: Theme.of(context).textTheme.bodyMedium,
-//         ),
-//         const SizedBox(height: 16),
-//         DateTimePicker(
-//           type: DateTimePickerType.Date,
-//           onDateChanged: (date) {
-//             setState(() {
-//               _d2 = DateFormat('dd MMM, yyyy').format(date);
-//             });
-//           },
-//         )
-//       ],
-//     );
-//   }
-//
-//   Widget _timePicker() {
-//     return Column(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       children: [
-//         Text(
-//           'Time Picker',
-//           textAlign: TextAlign.center,
-//           style: Theme.of(context).textTheme.titleLarge,
-//         ),
-//         const SizedBox(height: 8),
-//         Text(
-//           'Time: $_t2',
-//           textAlign: TextAlign.center,
-//           style: Theme.of(context).textTheme.bodyMedium,
-//         ),
-//         const SizedBox(height: 16),
-//         DateTimePicker(
-//           type: DateTimePickerType.Time,
-//           timeInterval: const Duration(minutes: 30),
-//           onTimeChanged: (time) {
-//             setState(() {
-//               _t2 = DateFormat('hh:mm:ss aa').format(time);
-//             });
-//           },
-//         )
-//       ],
-//     );
-//   }
-//
-//   Widget _colorPallet() {
-//     return Row(
-//       crossAxisAlignment: CrossAxisAlignment.center,
-//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//       children: [
-//         InkWell(
-//           onTap: () {
-//             setState(() {
-//               _color = Colors.amber;
-//             });
-//           },
-//           child: Container(
-//             width: 24,
-//             height: 24,
-//             color: Colors.amber,
-//           ),
-//         ),
-//         InkWell(
-//           onTap: () {
-//             setState(() {
-//               _color = Colors.green;
-//             });
-//           },
-//           child: Container(
-//             width: 24,
-//             height: 24,
-//             color: Colors.green,
-//           ),
-//         ),
-//         InkWell(
-//           onTap: () {
-//             setState(() {
-//               _color = Colors.blue;
-//             });
-//           },
-//           child: Container(
-//             width: 24,
-//             height: 24,
-//             color: Colors.blue,
-//           ),
-//         ),
-//         InkWell(
-//           onTap: () {
-//             setState(() {
-//               _color = Colors.deepPurple;
-//             });
-//           },
-//           child: Container(
-//             width: 24,
-//             height: 24,
-//             color: Colors.deepPurple,
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
+
+import 'package:flutter/material.dart';
+import 'package:flutter_credit_card/credit_card_brand.dart';
+import 'package:flutter_credit_card/flutter_credit_card.dart';
+
+
+
+class MySample extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return MySampleState();
+  }
+}
+
+class MySampleState extends State<MySample> {
+  String cardNumber = '';
+  String expiryDate = '';
+  String cardHolderName = '';
+  String cvvCode = '';
+  bool isCvvFocused = false;
+  bool useGlassMorphism = false;
+  bool useBackgroundImage = false;
+  OutlineInputBorder? border;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    border = OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.grey.withOpacity(0.7),
+        width: 2.0,
+      ),
+    );
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Credit Card View Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: ExactAssetImage('assets/bg.png'),
+              fit: BoxFit.fill,
+            ),
+            color: Colors.black,
+          ),
+          child: SafeArea(
+            child: Column(
+              children: <Widget>[
+                const SizedBox(
+                  height: 30,
+                ),
+                CreditCardWidget(
+                  glassmorphismConfig:
+                  useGlassMorphism ? Glassmorphism.defaultConfig() : null,
+                  cardNumber: cardNumber,
+                  expiryDate: expiryDate,
+                  cardHolderName: cardHolderName,
+                  cvvCode: cvvCode,
+                  bankName: 'Axis Bank',
+                  frontCardBorder:
+                  !useGlassMorphism ? Border.all(color: Colors.grey) : null,
+                  backCardBorder:
+                  !useGlassMorphism ? Border.all(color: Colors.grey) : null,
+                  showBackView: isCvvFocused,
+                  obscureCardNumber: true,
+                  obscureCardCvv: true,
+                  isHolderNameVisible: true,
+                  cardBgColor: Colors.blueGrey,
+                  backgroundImage:
+                  useBackgroundImage ? 'assets/card_bg.png' : null,
+                  isSwipeGestureEnabled: true,
+                  onCreditCardWidgetChange:
+                      (CreditCardBrand creditCardBrand) {},
+                  customCardTypeIcons: <CustomCardTypeIcon>[
+                    CustomCardTypeIcon(
+                      cardType: CardType.mastercard,
+                      cardImage: Image.asset(
+                        'assets/mastercard.png',
+                        height: 48,
+                        width: 48,
+                      ),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        CreditCardForm(
+                          formKey: formKey,
+                          obscureCvv: true,
+                          obscureNumber: true,
+                          cardNumber: cardNumber,
+                          cvvCode: cvvCode,
+                          isHolderNameVisible: true,
+                          isCardNumberVisible: true,
+                          isExpiryDateVisible: true,
+                          cardHolderName: cardHolderName,
+                          expiryDate: expiryDate,
+                          themeColor: Colors.blue,
+                          textColor: Colors.white,
+                          cardNumberDecoration: InputDecoration(
+                            labelText: 'Number',
+                            hintText: 'XXXX XXXX XXXX XXXX',
+                            hintStyle: const TextStyle(color: Colors.white),
+                            labelStyle: const TextStyle(color: Colors.white),
+                            focusedBorder: border,
+                            enabledBorder: border,
+                          ),
+                          expiryDateDecoration: InputDecoration(
+                            hintStyle: const TextStyle(color: Colors.white),
+                            labelStyle: const TextStyle(color: Colors.white),
+                            focusedBorder: border,
+                            enabledBorder: border,
+                            labelText: 'Expired Date',
+                            hintText: 'XX/XX',
+                          ),
+                          cvvCodeDecoration: InputDecoration(
+                            hintStyle: const TextStyle(color: Colors.white),
+                            labelStyle: const TextStyle(color: Colors.white),
+                            focusedBorder: border,
+                            enabledBorder: border,
+                            labelText: 'CVV',
+                            hintText: 'XXX',
+                          ),
+                          cardHolderDecoration: InputDecoration(
+                            hintStyle: const TextStyle(color: Colors.white),
+                            labelStyle: const TextStyle(color: Colors.white),
+                            focusedBorder: border,
+                            enabledBorder: border,
+                            labelText: 'Card Holder',
+                          ),
+                          onCreditCardModelChange: onCreditCardModelChange,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              const Text(
+                                'Glassmorphism',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              const Spacer(),
+                              Switch(
+                                value: useGlassMorphism,
+                                inactiveTrackColor: Colors.grey,
+                                activeColor: Colors.white,
+                                activeTrackColor: Colors.blueGrey,
+                                onChanged: (bool value) => setState(() {
+                                  useGlassMorphism = value;
+                                }),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              const Text(
+                                'Card Image',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              const Spacer(),
+                              Switch(
+                                value: useBackgroundImage,
+                                inactiveTrackColor: Colors.grey,
+                                activeColor: Colors.white,
+                                activeTrackColor: Colors.blueGrey,
+                                onChanged: (bool value) => setState(() {
+                                  useBackgroundImage = value;
+                                }),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        GestureDetector(
+                          onTap: _onValidate,
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              gradient:  LinearGradient(
+                                colors: <Color>[
+                                  Colors.blueGrey,
+                                  Colors.blueGrey,
+                                  Colors.blueGrey ,
+                                  Colors.blueGrey,
+                                  Colors.blueGrey,
+                                  Colors.blueGrey,
+                                  Colors.blueGrey,
+                                ],
+                                begin: Alignment(-1, -4),
+                                end: Alignment(1, 4),
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            width: double.infinity,
+                            alignment: Alignment.center,
+                            child: const Text(
+                              'Validate',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'halter',
+                                fontSize: 14,
+                                package: 'flutter_credit_card',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _onValidate() {
+    if (formKey.currentState!.validate()) {
+      print('valid!');
+    } else {
+      print('invalid!');
+    }
+  }
+
+  void onCreditCardModelChange(CreditCardModel? creditCardModel) {
+    setState(() {
+      cardNumber = creditCardModel!.cardNumber;
+      expiryDate = creditCardModel.expiryDate;
+      cardHolderName = creditCardModel.cardHolderName;
+      cvvCode = creditCardModel.cvvCode;
+      isCvvFocused = creditCardModel.isCvvFocused;
+    });
+  }
+}

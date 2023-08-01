@@ -66,8 +66,8 @@ class _MyHomePageState extends State<MyHomePage> {
   /// widget list
   final List<Widget> bottomBarPages = [
     const Page1(),
-     const Page2(),
-      Page3(),
+      Page2(),
+    MySample(),
    // const Page4(),
     //const Page5(),
   ];
@@ -319,12 +319,12 @@ class _Page1State extends State<Page1> {
 //   }
 // }
 
-class Page3 extends StatefulWidget {
+class Page2 extends StatefulWidget {
   @override
-  State<Page3> createState() => _Page3State();
+  State<Page2> createState() => _Page2State();
 }
 
-class _Page3State extends State<Page3> {
+class _Page2State extends State<Page2> {
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
 
@@ -799,53 +799,53 @@ class _RegistrationFormState extends State<RegistrationForm> {
   }
 }
 
-class Page2 extends StatefulWidget {
-  const Page2({super.key});
-
-  @override
-  State<Page2> createState() => _Page2State();
-}
-
-
-class _Page2State extends State<Page2> {
-  Future<List<dynamic>> fetchData() async {
-    final url = Uri.parse('http://universities.hipolabs.com/search?country=United+States');
-
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      // If the server returns a 200 OK response, parse the JSON.
-      final List<dynamic> data = json.decode(response.body);
-      return data;
-    } else {
-      // If the server did not return a 200 OK response, throw an exception.
-      throw Exception('Failed to load data');
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<List<dynamic>>(
-      future: fetchData(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); // While data is being fetched, show a loading indicator.
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else {
-          // If the data is successfully fetched, you can use it in your UI.
-          final data = snapshot.data;
-          return Container(
-            height: 100,
-            width: 100,
-            color: Colors.blueGrey,
-            child: Center(
-              child: Text('Data: $data'),
-            ),
-          );
-        }
-      },
-    );
-  }
-}
-
+// class Page2 extends StatefulWidget {
+//   const Page2({super.key});
+//
+//   @override
+//   State<Page2> createState() => _Page2State();
+// }
+//
+//
+// class _Page2State extends State<Page2> {
+//   Future<List<dynamic>> fetchData() async {
+//     final url = Uri.parse('http://universities.hipolabs.com/search?country=United+States');
+//
+//     final response = await http.get(url);
+//
+//     if (response.statusCode == 200) {
+//       // If the server returns a 200 OK response, parse the JSON.
+//       final List<dynamic> data = json.decode(response.body);
+//       return data;
+//     } else {
+//       // If the server did not return a 200 OK response, throw an exception.
+//       throw Exception('Failed to load data');
+//     }
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return FutureBuilder<List<dynamic>>(
+//       future: fetchData(),
+//       builder: (context, snapshot) {
+//         if (snapshot.connectionState == ConnectionState.waiting) {
+//           return CircularProgressIndicator(); // While data is being fetched, show a loading indicator.
+//         } else if (snapshot.hasError) {
+//           return Text('Error: ${snapshot.error}');
+//         } else {
+//           // If the data is successfully fetched, you can use it in your UI.
+//           final data = snapshot.data;
+//           return Container(
+//             height: 100,
+//             width: 100,
+//             color: Colors.blueGrey,
+//             child: Center(
+//               child: Text('Data: $data'),
+//             ),
+//           );
+//         }
+//       },
+//     );
+//   }
+// }
+//
