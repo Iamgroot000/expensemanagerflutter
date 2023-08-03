@@ -306,31 +306,12 @@ class _Page1State extends State<Page1> {
 
 
 
-    class Expense {
+class Expense {
   String name;
   double amount;
 
   Expense(this.name, this.amount);
 }
-
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp();
-//   runApp(MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Flutter Demo',
-//       theme: ThemeData.from(
-//         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-//       ),
-//       home: Page3(),
-//     );
-//   }
-// }
 
 class Page2 extends StatefulWidget {
   @override
@@ -399,6 +380,31 @@ class _Page2State extends State<Page2> {
     }
   }
 
+  /// fetching data from firestore ...
+  Future<void> fetchDataFromFirestore() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+      await FirebaseFirestore.instance.collection('expenses').get();
+
+      // Clear the existing expenses list before adding fetched data
+      expenses.clear();
+
+      for (var doc in snapshot.docs) {
+        var data = doc.data();
+        String name = data['name'];
+        double amount = data['amount'];
+        expenses.add(Expense(name, amount));
+        print("this is expences $expenses");
+      }
+
+      setState(() {});
+    } catch (e) {
+      print('Error fetching data from Firestore: $e');
+    }
+  }
+
+
+
   void _showExpenseDialog(BuildContext context) {
     TextEditingController nameController = TextEditingController();
     TextEditingController amountController = TextEditingController();
@@ -448,6 +454,12 @@ class _Page2State extends State<Page2> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    fetchDataFromFirestore();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double totalExpenses = getTotalExpenses();
 
@@ -459,7 +471,7 @@ class _Page2State extends State<Page2> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 60,),
+            SizedBox(height: 60),
             ElevatedButton(
               onPressed: () => _selectDate(context),
               child: Text('Select Date'),
@@ -476,7 +488,7 @@ class _Page2State extends State<Page2> {
             SizedBox(height: 40),
             ElevatedButton(
               onPressed: () => _showExpenseDialog(context),
-              child: Text('Monthly Expenses'),
+              child: Text('Add Expense'),
             ),
             SizedBox(height: 20),
             Expanded(
